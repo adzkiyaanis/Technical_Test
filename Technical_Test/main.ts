@@ -129,26 +129,4 @@ console.log('Total stok buah di wadah IMPORT:', stockByType['IMPORT']);
 console.log('Total stok buah di wadah LOCAL:', stockByType['LOCAL']);
 
 //4. Apakah ada komentar terkait kasus di atas?
-//pada awalnya saya mengira program menggunakan JavaScript namun ternyata program menggunakan TypeScript
-
-// Apabila FruitType terus bertambah dan tidak memungkinkan untuk mendeklarasikan satu persatu
-// buat objek yang berisi daftar buah untuk setiap tipe buah
-const fruitTypes: {[key: string]: string[]} = {};
-fruits.forEach((fruit: IFruit) => {
-  const fruitType = fruit.fruitType.toUpperCase();
-  if (fruitTypes[fruitType]) {
-    fruitTypes[fruitType].push(fruit.fruitName.toLowerCase());
-  } else {
-    fruitTypes[fruitType] = [fruit.fruitName.toLowerCase()];
-  }
-});
-
-// fungsi untuk memeriksa apakah nama buah cocok dengan salah satu daftar buah untuk tipe buah tertentu
-function isFruitType(fruitName: string, fruitType: string): boolean {
-  const fruitList = fruitTypes[fruitType.toUpperCase()];
-  return !!fruitList && fruitList.includes(fruitName.toLowerCase());
-}
-// contoh penggunaan fungsi isFruitType
-console.log(isFruitType('apel', 'IMPORT')); // true
-console.log(isFruitType('Kurma', 'local')); // false
-console.log(isFruitType('Salak', 'Local')); // true
+//pada awalnya saya mengira program menggunakan JavaScript namun ternyata program menggunakan TypeScript.
