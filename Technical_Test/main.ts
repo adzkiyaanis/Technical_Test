@@ -56,6 +56,37 @@ type IFruit = {
   const fruitNames: string[] = fruits.map((fruit: IFruit) => fruit.fruitName);
 console.log(fruitNames);
 
+//bagaimana jika case apel dan Apel, Kurma dan KURMA supaya dilihat dri sisi 1 user
+//Mengubah seluruh nama buah menjadi lowercase dengan normalisasi
+const normalizedFruits: IFruit[] = fruits.map(fruit => ({
+  ...fruit,
+  fruitName: fruit.fruitName.toLowerCase()
+}));
+
+// Menampilkan nama buah yang dimiliki Andi setelah dinormalisasi
+const fruitNamesnormalize: string[] = normalizedFruits.map((fruit: IFruit) => fruit.fruitName);
+console.log(fruitNamesnormalize);
+
+//mencoba menampilkan jumlah total buah dan stok yang tersedia setelah dinormalisasi:
+
+const fruitCount: {[fruitName: string]: number} = {};
+const fruitStock: {[fruitName: string]: number} = {};
+
+normalizedFruits.forEach((fruit: IFruit) => {
+  if (fruitCount[fruit.fruitName]) {
+    fruitCount[fruit.fruitName] += 1;
+    fruitStock[fruit.fruitName] += fruit.stock;
+  } else {
+    fruitCount[fruit.fruitName] = 1;
+    fruitStock[fruit.fruitName] = fruit.stock;
+  }
+});
+
+console.log('Jumlah buah yang dimiliki Andi:');
+console.log(fruitCount);
+console.log('Jumlah stok buah yang tersedia:');
+console.log(fruitStock);
+
 //2. Andi memisahkan buahnya menjadi beberapa wadah berdasarkan tipe buah(fruitType). Berapa jumlah wadah yang dibutuhkan? Dan ada buah apa saja dimasing-masing wadah?
 let importFruits: IFruit[] = [];
 let localFruits: IFruit[] = [];
@@ -91,6 +122,7 @@ fruits.forEach((fruit) => {
     stockByType['LOCAL'] += fruit.stock
   }
 })
+//
 
 // Menampilkan hasil
 console.log('Total stok buah di wadah IMPORT:', stockByType['IMPORT']);
@@ -99,3 +131,24 @@ console.log('Total stok buah di wadah LOCAL:', stockByType['LOCAL']);
 //4. Apakah ada komentar terkait kasus di atas?
 //pada awalnya saya mengira program menggunakan JavaScript namun ternyata program menggunakan TypeScript
 
+// Apabila FruitType terus bertambah dan tidak memungkinkan untuk mendeklarasikan satu persatu
+// buat objek yang berisi daftar buah untuk setiap tipe buah
+const fruitTypes: {[key: string]: string[]} = {};
+fruits.forEach((fruit: IFruit) => {
+  const fruitType = fruit.fruitType.toUpperCase();
+  if (fruitTypes[fruitType]) {
+    fruitTypes[fruitType].push(fruit.fruitName.toLowerCase());
+  } else {
+    fruitTypes[fruitType] = [fruit.fruitName.toLowerCase()];
+  }
+});
+
+// fungsi untuk memeriksa apakah nama buah cocok dengan salah satu daftar buah untuk tipe buah tertentu
+function isFruitType(fruitName: string, fruitType: string): boolean {
+  const fruitList = fruitTypes[fruitType.toUpperCase()];
+  return !!fruitList && fruitList.includes(fruitName.toLowerCase());
+}
+// contoh penggunaan fungsi isFruitType
+console.log(isFruitType('apel', 'IMPORT')); // true
+console.log(isFruitType('Kurma', 'local')); // false
+console.log(isFruitType('Salak', 'Local')); // true
